@@ -1,0 +1,10 @@
+hex
+bin
+out
+*.hex
+*.elf
+*.o
+*.gch
+*.gno
+*.tmp
+
