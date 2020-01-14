@@ -181,6 +181,17 @@ const uint8_t *load_wavetable_n_from_progmem( const uint8_t *data, uint8_t index
 	return data;
 }
 
+// ---------------------------------------------
+
+static inline uint16_t adcread( uint8_t mux )
+{
+	//Read data from selected ADC (VCC as reference volatge)
+	ADMUX = ( mux << MUX0 ) | ( 1 << REFS0 ) | ( 1 << ADLAR );
+	ADCSRA |= ( 1 << ADSC );
+	while ( ADCSRA & ( 1 << ADSC ) );
+	return ADC;
+}
+
 
 // ---------------------------------------------
 
@@ -191,21 +202,23 @@ ISR( TIMER1_COMPA_vect )
 {
 	// DDS phasor
 	static uint16_t dds_phase = 0;
-	static uint16_t dds_step = 360;
+	static uint16_t dds_step = 180;
 
 	// Time counter
 	static uint16_t t_ms = 0;
 	static uint16_t t_cnt = 0;
 
+	uint8_t adc0 = adcread( 0 ) >> 8;
+	uint8_t adc1 = adcread( 1 ) >> 8;
+
 	// The osicllator and the filters
 	static filter1pole Fa = 0, Fb = 0;
-	audio_signal x = get_current_wavetable_sample( (t_ms / 256) % 60, dds_phase ) - 127;
-	int8_t k = 1 + (t_ms / 8) % 64;
+	audio_signal x = get_current_wavetable_sample( adc0 >> 2, dds_phase ) - 127;
+	int8_t k = adc1 >> 1;
 	audio_signal y = filter1pole_feed( &Fb, k, filter1pole_feed( &Fa, k, x ) );
 
-
 	// DAC output
-	PORTA = 127 + y;
+	PORTC = 127 + y;
 
 	// Phase stepping and time update
 	dds_phase += dds_step;
@@ -219,6 +232,12 @@ ISR( TIMER1_COMPA_vect )
 //! Synthesizer state init
 void synth_init( )
 {
+	// Resistor ladder outputs
+	DDRC = 0xff;
+
+	// ADC
+	ADCSRA = ( 1 << ADEN ) | ( 1 << ADPS2 );
+
 	// Load a wavetable
-	load_wavetable_n_from_progmem( ppg_wavetable, 2 );
+	load_wavetable_n_from_progmem( ppg_wavetable, 18 );
 }

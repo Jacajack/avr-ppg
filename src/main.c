@@ -60,10 +60,6 @@ static inline void ledpwm( uint8_t l1, uint8_t l2, uint8_t l3 )
 
 int main( )
 {
-	// Resistor ladder as output
-	PORTA = 0;
-	DDRA = 0xff;
-
 	// LED init
 	DDRB = 7;
 
@@ -77,7 +73,7 @@ int main( )
 	// fs = F_CPU / 1000
 	TCCR1A = 0;
 	TCCR1B = ( 1 << CS10 ) | ( 1 << WGM12 );
-	OCR1A = 999;
+	OCR1A = 499;
 	TCNT1 = 0;
 	TIMSK |= ( 1 << OCIE1A );
 
