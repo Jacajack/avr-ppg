@@ -13,10 +13,15 @@ It all runs on 32kHz sample rate, which is not bad. On Atmega328, this could be 
 Certain parts of the code (mainly MIDI interpreter and UART code) are taken from [avrsynth](https://github.com/Jacajack/avrsynth).
 Compatibility on the hardware level with that project has been broken, hence this project is not exactly a fork.
 I've removed license headers in the files, because updating them is pain. The license, however, stays the same.
- 
+
 Todo list:
-	- [x] Wavetable synthesis
-	- [x] Simple filters
-	- [ ] MIDI controls
-	- [ ] Scaling down to Atmega328
-	- [ ] a PCB?
+ - [x] Wavetable synthesis
+ - [x] Simple filters
+ - [ ] MIDI controls
+ - [ ] Scaling down to Atmega328
+ - [ ] a PCB?
+
+The prototype:<br>
+![](https://i.imgur.com/ka76hNB.png)
+
+
