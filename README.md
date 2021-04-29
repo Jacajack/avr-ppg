@@ -1,3 +1,7 @@
+# Notice
+
+This repository is now archived. If you're looking for a real AVR synthesizer, please take a look at [µsunth](https://www.github.com/jacajack/usynth).
+
 # avr-wave
  
 This project aims to create an AVR synthesizer based using wavetable synthesis.
